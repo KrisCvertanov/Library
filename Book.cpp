@@ -1,6 +1,9 @@
 #include "Book.h"
 
-Book::Book() {}
+Book::Book() {
+	rating = 0;
+	uniqueNumber = 0;
+}
 
 Book::Book(const String author_, const String title_, const String genre_, const String desc_, const String date_, const String tags_, const double rating_, const int num_) {
 	author = author_;

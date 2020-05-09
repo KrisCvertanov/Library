@@ -28,6 +28,8 @@ public:
 	char& operator[](const int);
 	bool operator==(const String&) const;
 	bool operator==(const char*) const;
+	bool operator!=(const String&) const;
+	bool operator!=(const char*) const;
 	int getCapacity() const;
 	int getSize() const;
 	void clear();

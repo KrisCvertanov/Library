@@ -129,10 +129,6 @@ char& String::operator[](const int i){
 	if (i <= size && i >= 0) {
 		return arr[i];
 	}
-	/*else {
-		std::cout << i << " is invalid index for string element!" << std::endl;
-		return char();
-	}*/
 }
 
 int String::getCapacity() const{
@@ -160,4 +156,12 @@ bool String::operator==(const char* str) const {
 	if (size != strlen(str)) return false;
 	if (strcmp(arr, str) == 0) return true;
 	else return false;
+}
+
+bool String::operator!=(const String& other) const {
+	return !(*this == other);
+}
+
+bool String::operator!=(const char* str) const {
+	return !(*this == str);
 }

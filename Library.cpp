@@ -28,6 +28,7 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 		if (!iFile) {
 			std::cerr << "Failed to open!" << std::endl;
 		}
+
 	}
 	iFile.seekg(0, std::ios::beg);
 	int i;
@@ -70,6 +71,7 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 		std::ifstream iFile2("users.txt", std::ios::in);
 		if (!iFile2) {
 			std::cerr << "Failed to open file of users vol.2!" << std::endl;
+			return;
 		}
 	}
 	iFile2.seekg(0, std::ios::beg);
@@ -87,6 +89,8 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 		}
 	}
 	iFile2.close();
+	std::cout << dir << " opened successfully!" << std::endl;
+	std::cout << std::endl;
 }
 
 void Library::close(Vector<Book>& tempBooks, Vector<User>& tempUsers) const{
@@ -96,6 +100,8 @@ void Library::close(Vector<Book>& tempBooks, Vector<User>& tempUsers) const{
 	}
 	tempBooks.clear();
 	tempUsers.clear();
+	std::cout << "File closed!" << std::endl;
+	std::cout << std::endl;
 }
 
 void Library::save(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempUsers) const{
@@ -126,43 +132,19 @@ void Library::save(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 	}
 	if (tempBooks.size() == 0 && tempUsers.size() == 0) {
 		std::cout << "File is closed. Cannot use that command!" << std::endl;
+		return;
 	}
+	std::cout << "Updates saved successfully in " << dir << "!" << std::endl;
 }
 
-void Library::saveas(Vector<Book>& tempBooks, Vector<User>& tempUsers) const {
+void Library::saveas(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempUsers) const {
 	int i = tempBooks.size();
 	if (i > 0) {
-		std::cout << "Enter file's name: ";
-		char* dir;
-		int br = 2;
-		dir = new char[br];
-		char letter;
-		std::cin.get(letter);
-		while (letter != '\n') {
-			char* tempArr = new char[br];
-			if (br == 2) {
-				tempArr[0] = letter;
-				tempArr[1] = '\0';
-			}
-			else {
-				strcpy(tempArr, dir);
-				tempArr[br - 2] = letter;
-				tempArr[br - 1] = '\0';
-			}
-			delete[] dir;
-			dir = new char[br];
-			strcpy(dir, tempArr);
-			br++;
-			delete[] tempArr;
-			std::cin.get(letter);
-		}
-
 		std::ofstream oFile(dir, std::ios::trunc);
 		if (!oFile) {
 			std::cerr << "Failed to open!" << std::endl;
 			return;
 		}
-		delete[] dir;
 		oFile << i << std::endl;
 		for (int j = 0; j < i; j++) {
 			tempBooks[j].save(oFile);
@@ -183,7 +165,10 @@ void Library::saveas(Vector<Book>& tempBooks, Vector<User>& tempUsers) const {
 	}
 	if (tempBooks.size() == 0 && tempUsers.size() == 0) {
 		std::cout << "File is closed. Cannot use that command!" << std::endl;
+		return;
 	}
+	std::cout << "Updates saved successfully in " << dir << "!" << std::endl;
+	std::cout << std::endl;
 }
 
 void Library::help() const{
@@ -202,28 +187,16 @@ void Library::help() const{
 	std::cout << "books add                         adds a new book to the library (admin needed)" << std::endl;
 	std::cout << "books remove                      removes a book from the library (admin needed)" << std::endl;
 	std::cout << "users add <user> <password>       add s a new user with name <user> and password <password> (admin needed)" << std::endl;
-	std::cout << "users remove <user>               deletes user with name <user> from currently opened file (admin needed)" << std::endl;
+	std::cout << "users remove		                deletes user with name <user> from currently opened file (admin needed)" << std::endl;
+	std::cout << std::endl;
 }
 
-void Library::login(const char* dir) {
+void Library::login(const char* dir, Vector<User>& tempUsers) {
 	if (userLoggedIn == true) {
 		std::cout << "You are already logged in." << std::endl;
 		return;
 	}
-	std::ifstream iFile(dir, std::ios::in);
-	if (!iFile) {
-		std::cerr << "Failed to open!" << std::endl;
-		return;
-	}
-	int l;
-	iFile >> l;
-	iFile.ignore();
-	User* tempUsers = new User[l];
-	for (int i = 0; i < l; i++) {
-		tempUsers[i].load(iFile);
-		iFile.ignore();
-	}
-	iFile.close();
+	int l = tempUsers.size();
 	int pos;
 	bool flag = false;
 	String tempName, tempPassword;
@@ -253,11 +226,11 @@ void Library::login(const char* dir) {
 			user = temp;
 		}
 		userLoggedIn = true;
-		delete[] tempUsers;
+		std::cout << std::endl;
 		return;
 	}
+
 	std::cout << "Entered password is incorrect!" << std::endl;
-	delete[] tempUsers;
 	return;
 
 }
@@ -270,6 +243,7 @@ void Library::logout() {
 	else {
 		std::cout << "There's no user logged in!" << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 void Library::booksAll() const {
@@ -289,12 +263,16 @@ void Library::booksInfo(int num) const {
 		return;
 	}
 	int j = books.size();
+	bool flag = false;
 	for (int i = 0; i < j; i++) {
 		if (books[i].getUniqueNumber() == num) {
 			books[i].print();
+			flag = true;
 			break;
 		}
 	}
+	if (!flag) std::cout << "There's no book with that serial number!" << std::endl;
+	std::cout << std::endl;
 }
 
 void Library::booksFind(const char* option, const char* option_str) const{ // proverka v meina dali e pravilno vuvedena opciyata
@@ -355,6 +333,7 @@ void Library::booksFind(const char* option, const char* option_str) const{ // pr
 			if (books[i].getTitle() == option_str) books[i].print();
 		}
 	}
+	std::cout << std::endl;
 }
 
 void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char* order) const{ // proverka dali vuvedenite opciya i red sa validni
@@ -507,18 +486,32 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 			}
 		}
 	}
+	std::cout << "Books sorted by " << option << " successfully!" << std::endl;
+	std::cout << std::endl;
 }
 
-void Library::addUser(Vector<User>& tempUsers) const {
+void Library::addUser(const char* username_, const char* password_, Vector<User>& tempUsers) const {
 	if (!user.getAccess()) {
 		std::cout << "There must be an admin logged in!" << std::endl;
 		return;
 	}
-	User newUser;
-	std::cout << "New user's name: ";
-	std::cin >> newUser;
+	User newUser(username_, password_, 0);
+	int l = tempUsers.size();
+	bool flag = true;
+	for (int i = 0; i < l; i++) {
+		if (tempUsers[i].getName() == newUser.getName()) {
+			flag = false;
+			break;
+		}
+	}
+	if (!flag) {
+		std::cout << "A user with that name already exists!" << std::endl;
+		return;
+	}
 	tempUsers.add(newUser);
+	std::cout << std::endl;
 	std::cout << "User addded successfully!" << std::endl;
+	std::cout << std::endl;
 }
 
 void Library::removeUser(Vector<User>& tempUsers) const {
@@ -569,7 +562,9 @@ void Library::removeUser(Vector<User>& tempUsers) const {
 		return;
 	}
 	tempUsers.removeAtIndex(pos);
+	std::cout << std::endl;
 	std::cout << "User removed successfully!" << std::endl;
+	std::cout << std::endl;
 }
 
 void Library::addBook(Vector<Book>& tempBooks) const {
@@ -580,9 +575,22 @@ void Library::addBook(Vector<Book>& tempBooks) const {
 	Book newBook;
 	std::cout << "New book: " << std::endl;
 	std::cin >> newBook;
+	bool flag = true;
+	int l = tempBooks.size();
+	for (int i = 0; i < l; i++) {
+		if (newBook.getUniqueNumber() == tempBooks[i].getUniqueNumber()) {
+			flag = false;
+			break;
+		}
+	}
+	if (!flag) {
+		std::cout << "A book with that serial number already exists!" << std::endl;
+		return;
+	}
 	tempBooks.add(newBook);
 	std::cout << std::endl;
 	std::cout << "Book added successfully!" << std::endl << std::endl;
+	std::cin.ignore();
 }
 
 void Library::removeBook(Vector<Book>& tempBooks) const {
@@ -605,10 +613,13 @@ void Library::removeBook(Vector<Book>& tempBooks) const {
 	}
 	if (!flag) {
 		std::cout << "Book with that serial number is not found!" << std::endl;
+		std::cout << std::endl;
 		return;
 	}
 	tempBooks.removeAtIndex(pos);
+	std::cout << std::endl;
 	std::cout << "Book removed successfully!" << std::endl << std::endl;
+	std::cin.ignore();
 }
 
 
