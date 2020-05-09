@@ -17,7 +17,10 @@ public:
     Vector& operator=(const Vector&);
     ~Vector();
 
-    void add(const T&);   
+   // friend istream& operator>>(istream&, Vector<T>);
+
+
+    void add(const T&);
     int getStorage() const;
     int size() const;
     void print() const;
@@ -173,6 +176,12 @@ template <typename T>
 void Vector<T>::addToCount() {
     count++;
 }
+
+/*template <typename T>
+istream& operator>>(istream&, Vector<T>) {
+
+}*/
+
 #endif // VECTOR_HPP_
 
 
