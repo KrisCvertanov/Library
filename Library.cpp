@@ -38,8 +38,9 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 	tempBooks.allocateMemory(i);
 	if (i > 0) {
 		for (int j = 0; j < i; j++) {
-			tempBooks[j].load(iFile);
-			tempBooks.addToCount();
+			Book loadBook;
+			loadBook.load(iFile);
+			tempBooks.add(loadBook);
 			iFile.ignore();
 			iFile.ignore();
 		}
@@ -65,7 +66,7 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 		User admin("admin", "i<3c++", 1);
 		oFile2 << one << std::endl;
 		admin.save(oFile2);
-		tempUsers.addToCount();
+		//tempUsers.addToCount();
 		oFile2.close();
 
 		std::ifstream iFile2("users.txt", std::ios::in);
@@ -82,10 +83,10 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 	tempUsers.allocateMemory(p);
 	if (p > 0) {
 		for (int j = 0; j < p; j++) {
-			tempUsers[j].load(iFile2);
-			tempUsers.addToCount();
+			User loadUser;
+			loadUser.load(iFile2);
+			tempUsers.add(loadUser);
 			iFile2.ignore();
-			//iFile.ignore();
 		}
 	}
 	iFile2.close();

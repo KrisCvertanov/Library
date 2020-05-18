@@ -10,6 +10,7 @@ private:
     int count;
 
     void copyVectors(const Vector&);
+    void addToCount();
 public:
     Vector();
     Vector(int);
@@ -29,7 +30,6 @@ public:
     void clear();
     void deleteVector();
     void allocateMemory(int);
-    void addToCount();
 
     bool operator==(const Vector<T>&) const;
     T& operator[](int) const;

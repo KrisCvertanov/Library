@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
 #include <fstream>
 #include "Library.h"
 
@@ -18,7 +19,9 @@ int main()
 	cout << "Welcome to my Library! Enter a command to perform an action. To see list with all commands, type help." << endl;
 	Library lib;
 	Vector<Book> tempBooks;
+	User admin("admin", "i<3c++", 1);
 	Vector<User> tempUsers;
+	tempUsers.add(admin);
 	String command;
 	char* dir = new char[1];
 	bool fileOpened = false;
@@ -60,14 +63,8 @@ int main()
 		else if (strcmp(wordsOfCommand[0], "help") == 0 && numOfWords == 1) {
 			lib.help();
 		}
-		else if (strcmp(wordsOfCommand[0], "login") == 0 && numOfWords == 1) {
-			if(fileOpened) lib.login(dir, tempUsers);
-			else cout << "You haven't opened a file yet." << endl;
-		}
-		else if (strcmp(wordsOfCommand[0], "logout") == 0 && numOfWords == 1){
-			if(fileOpened) lib.logout();
-			else cout << "You haven't opened a file yet." << endl;
-		}
+		else if (strcmp(wordsOfCommand[0], "login") == 0 && numOfWords == 1) lib.login(dir, tempUsers);
+		else if (strcmp(wordsOfCommand[0], "logout") == 0 && numOfWords == 1) lib.logout();
 		else if (strcmp(wordsOfCommand[0], "exit") == 0 && numOfWords == 1) {
 			cout << "Exiting the program..." << endl;
 			return 0;
@@ -87,7 +84,7 @@ int main()
 			if(fileOpened) lib.saveas(wordsOfCommand[1], tempBooks, tempUsers);
 			else cout << "You haven't opened a file yet." << endl;
 		}
-		else if (strcmp(wordsOfCommand[0], "books") == 0 && numOfWords > 1) {
+		else if (strcmp(wordsOfCommand[0], "books") == 0 && numOfWords > 1) { /// da si opravq chastta s broq na dumite
 			if (fileOpened) {
 				if (strcmp(wordsOfCommand[1], "all") == 0 && numOfWords == 2) lib.booksAll();
 				else if (strcmp(wordsOfCommand[1], "add") == 0 && numOfWords == 2) lib.addBook(tempBooks);
@@ -106,13 +103,43 @@ int main()
 						}
 					}
 					if (containsOnlyDigits) lib.booksInfo(serialNumber);
+					else cout << "Serial number needs to contain only digits!" << endl;
 				}
-				else if (strcmp(wordsOfCommand[1], "find") == 0 && numOfWords == 4) lib.booksFind(wordsOfCommand[2], wordsOfCommand[3]);
-				else if (strcmp(wordsOfCommand[1], "sort") == 0 && numOfWords == 3) lib.booksSort(tempBooks, wordsOfCommand[2]);
+				else if (strcmp(wordsOfCommand[1], "find") == 0 && numOfWords >=4){ 
+					if (strcmp(wordsOfCommand[2], "author") != 0 && strcmp(wordsOfCommand[2], "title") != 0 && strcmp(wordsOfCommand[2], "tag") != 0) {
+						cout << "That command does not exist! Enter a valid one." << endl;
+					}
+					else {
+						int lenghtOfStringOption = 0;
+						for (int i = 3; i < numOfWords; i++) {
+							lenghtOfStringOption += strlen(wordsOfCommand[i]);
+						}
+						char* stringOption = new char[lenghtOfStringOption + numOfWords - 2];
+						stringOption[0] = '\0';
+						for (int i = 3; i < numOfWords; i++) {
+							strcat(stringOption, wordsOfCommand[i]);
+							if (i < numOfWords - 1) strcat(stringOption, " ");
+						}
+						lib.booksFind(wordsOfCommand[2], stringOption);
+					}
+				}
+				else if (strcmp(wordsOfCommand[1], "sort") == 0 && numOfWords == 3) {
+					if (strcmp(wordsOfCommand[2], "title") != 0 && strcmp(wordsOfCommand[2], "author") != 0 && strcmp(wordsOfCommand[2], "year") != 0 && strcmp(wordsOfCommand[2], "rating") != 0) {
+						cout << "That command does not exist! Enter a valid one." << endl;
+					}
+					else lib.booksSort(tempBooks, wordsOfCommand[2]);
+				}
 				else if (strcmp(wordsOfCommand[1], "sort") == 0 && numOfWords == 4) {
-					if (strcmp(wordsOfCommand[3], "asc") == 0) lib.booksSort(tempBooks, wordsOfCommand[2]);
-					else if (strcmp(wordsOfCommand[3], "desc") == 0) lib.booksSort(tempBooks, wordsOfCommand[2], "desc");
+					if (strcmp(wordsOfCommand[2], "title") != 0 && strcmp(wordsOfCommand[2], "author") != 0 && strcmp(wordsOfCommand[2], "year") != 0 && strcmp(wordsOfCommand[2], "rating") != 0) {
+						cout << "That command does not exist! Enter a valid one." << endl;
+					}
+					else {
+						if (strcmp(wordsOfCommand[3], "asc") == 0) lib.booksSort(tempBooks, wordsOfCommand[2]);
+						else if (strcmp(wordsOfCommand[3], "desc") == 0) lib.booksSort(tempBooks, wordsOfCommand[2], "desc");
+						else cout << "That command does not exist! Enter a valid one." << endl;
+					}
 				}
+				else cout << "That command does not exist! Enter a valid one." << endl;
 			}
 			else cout << "You haven't opened a file yet." << endl;
 		}
