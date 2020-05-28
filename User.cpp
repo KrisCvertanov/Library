@@ -4,7 +4,7 @@ User::User() {
 	access = false;
 }
 
-User::User(const String name_, const String password_, const bool access_) {
+User::User(const String& name_, const String& password_, const bool access_) {
 	name = name_;
 	password = password_;
 	access = access_;

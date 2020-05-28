@@ -1,6 +1,7 @@
 ﻿#ifndef VECTOR_HPP_
 #define VECTOR_HPP_
 #include<iostream>
+#include<exception>
 
 template <typename T>
 class Vector {
@@ -21,15 +22,15 @@ public:
    // friend istream& operator>>(istream&, Vector<T>);
 
 
-    void add(const T&);
-    int getStorage() const;
-    int size() const;
-    void print() const;
-    void pushAtIndex(const T&, int);
-    void removeAtIndex(int);
-    void clear();
-    void deleteVector();
-    void allocateMemory(int);
+    void add(const T&);             // dobavya nai - otzad element kum vektora(push_back())
+    int getStorage() const;         //     
+    int size() const;               // funkcii za dostup
+    void print() const;             // izvejda elementite na vektora
+    void pushAtIndex(const T&, int);        // na posochen index zamenya predishana st-st s novopodadena
+    void removeAtIndex(int);        // premahva element na daden index (namalyava goleminata s 1)
+    void clear();                   // izchistva zadelenata pamet
+    void deleteVector();            // iztriva masiva
+    void allocateMemory(int);       // zadelya posocheno kolichestvo pamet za vektora
 
     bool operator==(const Vector<T>&) const;
     T& operator[](int) const;
@@ -37,7 +38,11 @@ public:
 
 template <typename T>
 void Vector<T>::copyVectors(const Vector& other) {
-    arr = new T[other.storage];
+    arr = new(std::nothrow) T[other.storage];
+    if (arr == nullptr) {
+        throw ("No memory for vector!(Vector<T>::copyVectors)");
+        return;
+    }
     for (int i = 0; i < other.storage; i++) {
         arr[i] = other.arr[i];
     }
@@ -53,14 +58,20 @@ void Vector<T>::deleteVector() {
 
 template <typename T>
 Vector<T>::Vector() {
-    arr = new T[1];
+    arr = new(std::nothrow) T[1];
+    if (arr == nullptr) {
+        throw ("No memory for vector!(default constructor)");
+    }
     storage = 1;
     count = 0;
 }
 
 template <typename T>
 Vector<T>::Vector(int index) {
-    arr = new T[index + 1];
+    arr = new(std::nothrow) T[index + 1];
+    if (arr == nullptr) {
+        throw ("No memory for vector!(Vector(int))");
+    }
     storage = index + 1;
     count = 0;
 }
@@ -86,8 +97,12 @@ Vector<T>::~Vector() {
 
 template <typename T>
 void Vector<T>::add(const T& element) {
-    if (storage == count) {
-        T* temp = new T[2 * storage];
+    if (storage == count) {         // ako zadelenata pamet za vektora e svurshila
+        T* temp = new(std::nothrow) T[2 * storage];
+        if (temp == nullptr) {
+            throw ("No memory for vector!(Vector<T>::add())");
+            return;
+        }
         for (int i = 0; i < storage; i++) {
             temp[i] = arr[i];
         }
@@ -101,7 +116,7 @@ void Vector<T>::add(const T& element) {
 
 template <typename T>
 void Vector<T>::pushAtIndex(const T& element, int index) {
-    arr[index] = element;
+    arr[index] = element;   // prisvoyava na dadeniya index posochenata stoinost
 }
 
 template <typename T>
@@ -112,12 +127,12 @@ void Vector<T>::removeAtIndex(int i) {
     }
     Vector<T> tempVector(count-1);
     int br = 0;
-    for (int j = 0; j < i; j++) {
+    for (int j = 0; j < i; j++) {   // kopira vektora do i-tiya element
         tempVector[br] = arr[j];
         br++;
         tempVector.addToCount();
     }
-    for (int j = i + 1; j < count; j++) {
+    for (int j = i + 1; j < count; j++) {   // kopira vektora ot i+1-viya do posledniya element
         tempVector[br] = arr[j];
         br++;
         tempVector.addToCount();
@@ -131,7 +146,7 @@ int Vector<T>::getStorage() const {
 }
 
 template <typename T>
-int Vector<T>::size() const {
+int Vector<T>::size() const {       // vrushta goleminata na vektora
     return count;
 }
 
@@ -160,14 +175,22 @@ T& Vector<T>::operator[](int i) const {
 template <typename T>
 void Vector<T>::clear() {
     delete[] arr;
-    arr = new T[1];
+    arr = new(std::nothrow) T[1];
+    if (arr == nullptr) {
+        throw ("No memory for vector!(Vector<T>::clear())");
+        return;
+    }
     storage = 1;
     count = 0;
 }
 
 template <typename T>
 void Vector<T>::allocateMemory(int index) {
-    arr = new T[index + 1];
+    arr = new(std::nothrow) T[index + 1];
+    if (arr == nullptr) {
+        throw ("No memory for vector!(Vector<T>::allocateMemory())");
+        return;
+    }
     storage = index + 1;
     count = 0;
 }

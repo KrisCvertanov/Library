@@ -9,11 +9,12 @@ Library::Library() {
 
 void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempUsers){
 	std::ifstream iFile(dir, std::ios::in); // otvarya faila za knigite
-	if (!iFile) {
+	if (!iFile) { // ako fail s tova ime ne sushtestvuva, se suzdava prazen takuv
 		std::ofstream oFile(dir);
 		int zero = 0;
 		oFile << zero;
 		oFile.close();
+		std::cout << "There was no existing file with that name, but there was created a new empty one!" << std::endl;
 		iFile.open(dir, std::ios::in);
 	}
 	iFile.seekg(0, std::ios::end);
@@ -40,7 +41,7 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 	tempBooks.deleteVector();
 	tempBooks.allocateMemory(i);
 	if (i > 0) {
-		for (int j = 0; j < i; j++) {
+		for (int j = 0; j < i; j++) { // chete knigite ot faila
 			Book loadBook;
 			loadBook.load(iFile);
 			tempBooks.add(loadBook);
@@ -54,7 +55,7 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 
 	std::ifstream iFile2("users.txt"); // otvarya faila za potrebitelite
 	if (!iFile2) {
-		std::cerr << "Failed to open file with users!" << std::endl;
+		std::cerr << "Failed to open file with users!(there must exist one)" << std::endl;
 		return;
 	}
 	iFile2.seekg(0, std::ios::end);
@@ -66,14 +67,14 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 			return;
 		}
 		int one = 1;
-		User admin("admin", "i<3c++", 1);
+		User admin("admin", "i<3c++", 1); // zapisva potrebitelyat admin(koito go ima po podrazbirane vuv vsyaka sistema)
 		oFile2 << one << std::endl;
 		admin.save(oFile2);
 		oFile2.close();
 
 		std::ifstream iFile2("users.txt", std::ios::in);
 		if (!iFile2) {
-			std::cerr << "Failed to open file of users vol.2!" << std::endl;
+			std::cerr << "Failed to open file of users vol.2!(there must exist one)" << std::endl;
 			return;
 		}
 	}
@@ -84,7 +85,7 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 	tempUsers.deleteVector();
 	tempUsers.allocateMemory(p);
 	if (p > 0) {
-		for (int j = 0; j < p; j++) {
+		for (int j = 0; j < p; j++) { // chete potrebitelite ot users.txt
 			User loadUser;
 			loadUser.load(iFile2);
 			tempUsers.add(loadUser);
@@ -116,7 +117,7 @@ void Library::save(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 		return;
 	}
 	oFile << i << std::endl;
-	for (int j = 0; j < i; j++) {
+	for (int j = 0; j < i; j++) { // zapisva promenite po bibliotekata v tekushtiya fail
 		tempBooks[j].save(oFile);
 	}
 	oFile.close();
@@ -124,11 +125,11 @@ void Library::save(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 	if (i > 0) {
 		std::ofstream oFile("users.txt", std::ios::trunc);
 		if (!oFile) {
-			std::cerr << "Failed to open!" << std::endl;
+			std::cerr << "Failed to open!(there must exist users.txt fail!)" << std::endl;
 			return;
 		}
-		oFile << i << std::endl;
-		for (int j = 0; j < i; j++) {
+		oFile << i << std::endl; 
+		for (int j = 0; j < i; j++) { // zapisva informaciyata za potrebitelite v users.txt
 			tempUsers[j].save(oFile);
 		}
 	}
@@ -148,7 +149,7 @@ void Library::saveas(const char* dir, Vector<Book>& tempBooks, Vector<User>& tem
 		return;
 	}
 	oFile << i << std::endl;
-	for (int j = 0; j < i; j++) {
+	for (int j = 0; j < i; j++) { // zapisva promenite po bibliotekata v noviya fail
 		tempBooks[j].save(oFile);
 	}
 	oFile.close();
@@ -161,7 +162,7 @@ void Library::saveas(const char* dir, Vector<Book>& tempBooks, Vector<User>& tem
 			return;
 		}
 		oFile << i << std::endl;
-		for (int j = 0; j < i; j++) {
+		for (int j = 0; j < i; j++) { // zapisva informaciyata za potrebitelite v users.txt
 			tempUsers[j].save(oFile);
 		}
 		oFile.close();
@@ -190,12 +191,12 @@ void Library::help() const{
 	std::cout << "books add                         adds a new book to the library (admin needed)" << std::endl;
 	std::cout << "books remove                      removes a book from the library (admin needed)" << std::endl;
 	std::cout << "users add <user> <password>       add s a new user with name <user> and password <password> (admin needed)" << std::endl;
-	std::cout << "users remove		                deletes user with name <user> from currently opened file (admin needed)" << std::endl;
+	std::cout << "users remove		          deletes user with name <user> from currently opened file (admin needed)" << std::endl;
 	std::cout << std::endl;
 }
 
 void Library::login(const char* dir, Vector<User>& tempUsers) {
-	if (userLoggedIn == true) {
+	if (userLoggedIn == true) {   // ne moje potrebitel da vleze sistemata, ako ima veche lognat takuv
 		std::cerr << "You are already logged in." << std::endl;
 		return;
 	}
@@ -206,7 +207,7 @@ void Library::login(const char* dir, Vector<User>& tempUsers) {
 	std::cout << "Enter username: ";
 	std::cin >> tempName;
 	for (int i = 0; i < l; i++) { /// priema se, che nqma potrebiteli s edni i sushti imena i razlichni paroli
-		if (tempName == tempUsers[i].getName()) {
+		if (tempName == tempUsers[i].getName()) { 
 			flag = true;
 			pos = i;
 			break;
@@ -271,7 +272,7 @@ void Library::booksInfo(int num) const {
 	int j = books.size();
 	bool flag = false;
 	for (int i = 0; i < j; i++) {
-		if (books[i].getUniqueNumber() == num) {
+		if (books[i].getUniqueNumber() == num) { // namira knigata s tozi nomer(ako ima takava)
 			books[i].print();
 			flag = true;
 			break;
@@ -287,28 +288,38 @@ void Library::booksFind(const char* option, const char* option_str) const{ // pr
 		return;
 	}
 	int n = books.size();
-	if (strcmp(option, "tag") == 0) {
+	if (strcmp(option, "tag") == 0) { // tursi se po tag
 		for (int i = 0; i < n; i++) {
 			int br = 0;
 			String tempTags = books[i].getTags();
 			for (int j = 0; j < tempTags.getSize(); j++) {
 				if (tempTags[j] == ' ') br++; // ochakva se che tagovete sa razdeleni s 1 interval
 			}
-			char** bookTags = new char* [br + 1];
+			char** bookTags = new(std::nothrow) char* [br + 1];
+			if (bookTags == nullptr) {
+				throw ("No memory for tags of book!(Library::booksFind())");
+			}
 			int count = 0;
 			for (int j = 0; j < tempTags.getSize(); j++) {
 				br = 0;
 				int s = 0;
-				while (tempTags[j+s] != ' ' && (j + s < tempTags.getSize())) {
+				while (tempTags[j+s] != ' ' && (j + s < tempTags.getSize())) { // zadelya se pamet za tagovete
 					br++;
 					s++;
 				}
 				j += br;
-				bookTags[count] = new char[br + 1];
+				bookTags[count] = new(std::nothrow) char[br + 1];
+				if (bookTags[count] == nullptr) {
+					for (int m = 0; m < count; m++) {
+						delete[] bookTags[m];
+					}
+					delete[] bookTags;
+					throw ("No memory for tags of book!(Library::booksFind())");
+				}
 				count++;
 			}
 			count = 0;
-			for (int j = 0; j < tempTags.getSize(); j++) {
+			for (int j = 0; j < tempTags.getSize(); j++) { // inicializirame tagovete
 				br = 0;
 				int s = 0;
 				while (tempTags[j + s] != ' ' && (j + s < tempTags.getSize())) {
@@ -329,27 +340,27 @@ void Library::booksFind(const char* option, const char* option_str) const{ // pr
 			delete[] bookTags;
 		}
 	}
-	else if(strcmp(option, "author") == 0) {
+	else if(strcmp(option, "author") == 0) { // tursi se po author
 		for (int i = 0; i < n; i++) {
-			if (books[i].getAuthor() == option_str) books[i].print();
+			if (books[i].getAuthor() == option_str) books[i].print(); 
 		}
 	}
-	else { // title
-		for (int i = 0; i < n; i++) {
+	else { // tursi se po title
+		for (int i = 0; i < n; i++) { 
 			if (books[i].getTitle() == option_str) books[i].print();
 		}
 	}
 	std::cout << std::endl;
 }
 
-void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char* order) const{ // proverka dali vuvedenite opciya i red sa validni
+void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char* order) const{ 
 	if (!userLoggedIn) {
 		std::cerr << "There must be a user logged in!" << std::endl;
 		return;
 	}
 	int n = tempBooks.size();
-	if (strcmp(option, "title") == 0) {
-		if (strcmp(order, "asc") == 0) {
+	if (strcmp(option, "title") == 0) { // sortira se po title
+		if (strcmp(order, "asc") == 0) { // v narastvasht red
 			for (int i = 0; i < n; i++) {
 				String firstBookTitle = tempBooks[i].getTitle();
 				for (int j = i + 1; j < n; j++) {
@@ -368,7 +379,7 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 				}
 			}
 		}
-		else {
+		else { // v namalyavasht red
 			for (int i = 0; i < n; i++) {
 				String firstBookTitle = tempBooks[i].getTitle();
 				for (int j = i + 1; j < n; j++) {
@@ -388,8 +399,8 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 			}
 		}
 	}
-	else if (strcmp(option, "author") == 0) {
-		if (strcmp(order, "asc") == 0) {
+	else if (strcmp(option, "author") == 0) { // sortira se po author
+		if (strcmp(order, "asc") == 0) {      // v narastcasht red
 			for (int i = 0; i < n; i++) {
 				String firstBookAuthor = tempBooks[i].getAuthor();
 				for (int j = i + 1; j < n; j++) {
@@ -408,7 +419,7 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 				}
 			}
 		}
-		else {
+		else {   // v namalyavasht red
 			for (int i = 0; i < n; i++) {
 				String firstBookAuthor = tempBooks[i].getAuthor();
 				for (int j = i + 1; j < n; j++) {
@@ -428,8 +439,8 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 			}
 		}
 	}
-	else if (strcmp(option, "year") == 0) {
-		if (strcmp(order, "asc") == 0) {
+	else if (strcmp(option, "year") == 0) {   // soritra se po year
+		if (strcmp(order, "asc") == 0) {	  // v narastvasht red
 			for (int i = 0; i < n; i++) {
 				char firstBookYear[5]; // priema se, che godinata e 4-cifreni chislo
 				String tempBook1 = tempBooks[i].getDateOfRelease();
@@ -448,7 +459,7 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 				}
 			}
 		}
-		else {
+		else { // v namalyavasht red
 			for (int i = 0; i < n; i++) {
 				char firstBookYear[5]; // priema se, che godinata e 4-cifreni chislo
 				String tempBook1 = tempBooks[i].getDateOfRelease();
@@ -468,8 +479,8 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 			}
 		}
 	}
-	else { // rating
-		if (strcmp(order, "asc") == 0) {
+	else {								   // sortira se po rating
+		if (strcmp(order, "asc") == 0) {   // v narastvasht red
 			for (int i = 0; i < n; i++) {
 				for (int j = i + 1; j < n; j++) {
 					if (tempBooks[i].getRating() > tempBooks[j].getRating()) {
@@ -480,7 +491,7 @@ void Library::booksSort(Vector<Book>& tempBooks, const char* option, const char*
 				}
 			}
 		}
-		else {
+		else {	// v namalyavasht red
 			for (int i = 0; i < n; i++) {
 				for (int j = i + 1; j < n; j++) {
 					if (tempBooks[i].getRating() < tempBooks[j].getRating()) {
@@ -505,12 +516,12 @@ void Library::addUser(const char* username_, const char* password_, Vector<User>
 	int l = tempUsers.size();
 	bool flag = true;
 	for (int i = 0; i < l; i++) {
-		if (tempUsers[i].getName() == newUser.getName()) {
+		if (tempUsers[i].getName() == newUser.getName()) { // tursi dali ima potrebitel s tova ime
 			flag = false;
 			break;
 		}
 	}
-	if (!flag) {
+	if (!flag) {  // ako ima, imeto e zaeto i ne moje da se polzva
 		std::cerr << "A user with that name already exists!" << std::endl;
 		return;
 	}
@@ -528,11 +539,18 @@ void Library::removeUser(Vector<User>& tempUsers) const {
 	std::cout << "Enter user's name you want to remove: ";
 	char* oldUser;
 	int br = 2;
-	oldUser = new char[br];
+	oldUser = new(std::nothrow) char[br];
+	if (oldUser == nullptr) {
+		throw ("No memory for name!(Library::removeUser())");
+	}
 	char letter;
 	std::cin.get(letter);
 	while (letter != '\n') {
-		char* tempArr = new char[br];
+		char* tempArr = new(std::nothrow) char[br];
+		if (tempArr == nullptr) {
+			delete[] oldUser;
+			throw ("No memory for name!(Library::removeUser())");
+		}
 		if (br == 2) {
 			tempArr[0] = letter;
 			tempArr[1] = '\0';
@@ -543,7 +561,11 @@ void Library::removeUser(Vector<User>& tempUsers) const {
 			tempArr[br - 1] = '\0';
 		}
 		delete[] oldUser;
-		oldUser = new char[br];
+		oldUser = new(std::nothrow) char[br];
+		if (oldUser == nullptr) {
+			delete[] tempArr;
+			throw ("No memory for name!(Library::removeUser())");
+		}
 		strcpy(oldUser, tempArr);
 		br++;
 		delete[] tempArr;
@@ -557,7 +579,7 @@ void Library::removeUser(Vector<User>& tempUsers) const {
 	int n = tempUsers.size(), pos;
 	bool flag = false;
 	for (int i = 0; i < n; i++) {
-		if (tempUsers[i].getName() == oldUser) {
+		if (tempUsers[i].getName() == oldUser) { // tursi potrebitelya s tova ime(ako sushtestvuva)
 			flag = true;
 			pos = i;
 			break;
@@ -584,7 +606,7 @@ void Library::addBook(Vector<Book>& tempBooks) const {
 	bool flag = true;
 	int l = tempBooks.size();
 	for (int i = 0; i < l; i++) {
-		if (newBook.getUniqueNumber() == tempBooks[i].getUniqueNumber()) {
+		if (newBook.getUniqueNumber() == tempBooks[i].getUniqueNumber()) { // proveryava dali seriiniyat nomer e unikalen
 			flag = false;
 			break;
 		}
@@ -611,7 +633,7 @@ void Library::removeBook(Vector<Book>& tempBooks) const {
 	int n = tempBooks.size(), pos;
 	bool flag = false;
 	for (int i = 0; i < n; i++) {
-		if (tempBooks[i].getUniqueNumber() == oldBookUN) {
+		if (tempBooks[i].getUniqueNumber() == oldBookUN) { // proveryava ima li kniga s tozi nomer
 			flag = true;
 			pos = i;
 			break;

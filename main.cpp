@@ -147,6 +147,7 @@ int main()
 			if (fileOpened) {
 				if (strcmp(wordsOfCommand[1], "add") == 0 && numOfWords == 4) lib.addUser(wordsOfCommand[2], wordsOfCommand[3], tempUsers);
 				else if (strcmp(wordsOfCommand[1], "remove") == 0 && numOfWords == 2) lib.removeUser(tempUsers);
+				else cout << "That command does not exist! Enter a valid one." << endl;
 			}
 			else cout << "You haven't opened a file yet." << endl;
 		}

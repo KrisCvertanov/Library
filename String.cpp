@@ -1,7 +1,11 @@
 #include "String.h"
 
 void String::copyStrings(const char* arr_, const int capacity_, const int size_) {
-	arr = new char[strlen(arr_) + 1];
+	arr = new(std::nothrow) char[strlen(arr_) + 1];
+	if (arr == nullptr) {
+		throw ("No memory for string!(String::copyString)");
+		return;
+	}
 	strcpy(arr, arr_);
 	capacity = capacity_;
 	size = size_;
@@ -12,7 +16,10 @@ void String::deleteString() {
 }
 
 String::String() {
-	arr = new char[1];
+	arr = new(std::nothrow) char[1];
+	if (arr == nullptr) {
+		throw ("No memory for string!(default constructor)");
+	}
 	capacity = 1;
 	size = 0;
 }
@@ -36,7 +43,10 @@ String& String::operator=(const String& other) {
 String& String::operator=(const char* str) {
 	deleteString();
 	int l = strlen(str);
-	arr = new char[l + 1];
+	arr = new(std::nothrow) char[l + 1];
+	if (arr == nullptr) {
+		throw ("No memory for string!(operator= (const char*))");
+	}
 	for (int i = 0; i < l; i++) {
 		arr[i] = str[i];
 	}
@@ -50,12 +60,17 @@ String::~String() {
 	deleteString();
 }
 
-std::istream& operator>>(std::istream& in, String& str) {
+std::istream& operator>>(std::istream& in, String& str) { // vuvejdane simvol po simvol
 	char letter;
 	int br = 2;
 	in.get(letter);
 	while (letter != '\n') {
-		char* tempArr = new char[br];
+		char* tempArr = new(std::nothrow) char[br];
+		if (tempArr == nullptr) {
+			if (str.arr != nullptr) delete[] str.arr;
+			throw ("No memory for string!(operator>>)");
+			return in;
+		}
 		if (br == 2) {
 			tempArr[0] = letter;
 			tempArr[1] = '\0';
@@ -66,7 +81,12 @@ std::istream& operator>>(std::istream& in, String& str) {
 			tempArr[br - 1] = '\0';
 		}
 		str.deleteString();
-		str.arr = new char[br];
+		str.arr = new(std::nothrow) char[br];
+		if (str.arr == nullptr) {
+			delete[] tempArr;
+			throw ("No memory for string!(operator>>)");
+			return in;
+		}
 		strcpy(str.arr, tempArr);
 		br++;
 		delete[] tempArr;
@@ -87,12 +107,17 @@ std::ostream& operator<<(std::ostream& out, const String& str){
 	return out;
 }
 
-std::ifstream& operator>>(std::ifstream& iFile, String& str) {
+std::ifstream& operator>>(std::ifstream& iFile, String& str) { // chetene simvol po simvol
 	char letter;
 	int br = 2;
 	iFile.get(letter);
 	while (letter != '\n') {
-		char* tempArr = new char[br];
+		char* tempArr = new(std::nothrow) char[br];
+		if (tempArr == nullptr) {
+			if (str.arr != nullptr) delete[] str.arr;
+			throw ("No memory for string!(operator>>)");
+			return iFile;
+		}
 		if (br == 2) {
 			tempArr[0] = letter;
 			tempArr[1] = '\0';
@@ -103,7 +128,12 @@ std::ifstream& operator>>(std::ifstream& iFile, String& str) {
 			tempArr[br - 1] = '\0';
 		}
 		str.deleteString();
-		str.arr = new char[br];
+		str.arr = new(std::nothrow) char[br];
+		if (str.arr == nullptr) {
+			delete[] tempArr;
+			throw ("No memory for string!(operator>>)");
+			return iFile;
+		}
 		strcpy(str.arr, tempArr);
 		br++;
 		delete[] tempArr;
@@ -142,6 +172,10 @@ int String::getSize() const{
 void String::clear() {
 	delete[] arr;
 	arr = new char[1];
+	if (arr == nullptr) {
+		throw ("No memory for string(String::clear())!");
+		return;
+	}
 	capacity = 1;
 	size = 0;
 }
