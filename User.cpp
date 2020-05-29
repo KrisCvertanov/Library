@@ -16,11 +16,11 @@ User::User(const char* name_, const char* password_, const bool access_) {
 	access = access_;
 }
 
-const String User::getName() const {
+const String& User::getName() const {
 	return name;
 }
 
-const String User::getPassword() const {
+const String& User::getPassword() const {
 	return password;
 }
 

@@ -27,27 +27,27 @@ Book::Book(const char* author_, const char* title_, const char* genre_, const ch
 	uniqueNumber = num_;
 }
 
-const String Book::getAuthor() const {
+const String& Book::getAuthor() const {
 	return author;
 }
 
-const String Book::getTitle() const {
+const String& Book::getTitle() const {
 	return title;
 }
 
-const String Book::getGenre() const {
+const String& Book::getGenre() const {
 	return genre;
 }
 
-const String Book::getDescription() const {
+const String& Book::getDescription() const {
 	return description;
 }
 
-const String Book::getDateOfRelease() const{
+const String& Book::getDateOfRelease() const{
 	return dateOfRelease;
 }
 
-const String Book::getTags() const{
+const String& Book::getTags() const{
 	return tags;
 }
 

@@ -12,8 +12,8 @@ public:
 	User();
 	User(const String&, const String&, const bool);
 	User(const char*, const char*, const bool);
-	const String getName() const;		// 
-	const String getPassword() const;	// funkcii za dostup
+	const String& getName() const;		// 
+	const String& getPassword() const;	// funkcii za dostup
 	bool getAccess() const;				//
 	void print() const;		// izvejda informaciya za potrebitelya
 	void clear();	// izchistva zadelenata pamet za potrebitelya

@@ -55,8 +55,12 @@ void Library::open(const char* dir, Vector<Book>& tempBooks, Vector<User>& tempU
 
 	std::ifstream iFile2("users.txt"); // otvarya faila za potrebitelite
 	if (!iFile2) {
-		std::cerr << "Failed to open file with users!(there must exist one)" << std::endl;
-		return;
+		std::ofstream oFile("users.txt");
+		int zero = 0;
+		oFile << zero;
+		oFile.close();
+		std::cout << "There was no existing file for the users, but there was created a new empty one!" << std::endl;
+		iFile.open("users.txt", std::ios::in);
 	}
 	iFile2.seekg(0, std::ios::end);
 	if (iFile2.tellg() == 0) { // ako faila e prazen
@@ -259,6 +263,11 @@ void Library::booksAll() const {
 		return;
 	}
 	int j = books.size();
+	if (j == 0) {
+		std::cout << "There are currently no books in ther library." << std::endl;
+		std::cout << std::endl;
+		return;
+	}
 	for (int i = 0; i < j; i++) {
 		books[i].printForBooksAll();
 	}

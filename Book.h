@@ -17,12 +17,12 @@ public:
 	Book();
 	Book(const String&, const String&, const String&, const String&, const String&, const String&, const double, const int);
 	Book(const char*, const char*, const char*, const char*, const char*, const char*, const double, const int);
-	const String getAuthor() const;				//
-	const String getTitle() const;				//
-	const String getGenre() const;				//
-	const String getDescription() const;		// funkcii za dostup
-	const String getDateOfRelease() const;		//
-	const String getTags() const;				//
+	const String& getAuthor() const;				//
+	const String& getTitle() const;				//
+	const String& getGenre() const;				//
+	const String& getDescription() const;		// funkcii za dostup
+	const String& getDateOfRelease() const;		//
+	const String& getTags() const;				//
 	double getRating() const;					//
 	int getUniqueNumber() const;				//
 	void print() const;  // izvejda informaciya za knigata

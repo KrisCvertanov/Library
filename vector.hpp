@@ -19,9 +19,6 @@ public:
     Vector& operator=(const Vector&);
     ~Vector();
 
-   // friend istream& operator>>(istream&, Vector<T>);
-
-
     void add(const T&);             // dobavya nai - otzad element kum vektora(push_back())
     int getStorage() const;         //     
     int size() const;               // funkcii za dostup

@@ -61,10 +61,16 @@ int main()
 			else cout << "You haven't opened a file yet." << endl;
 		}
 		else if (strcmp(wordsOfCommand[0], "help") == 0 && numOfWords == 1) {
-			lib.help();
+			 lib.help();
 		}
-		else if (strcmp(wordsOfCommand[0], "login") == 0 && numOfWords == 1) lib.login(dir, tempUsers);
-		else if (strcmp(wordsOfCommand[0], "logout") == 0 && numOfWords == 1) lib.logout();
+		else if (strcmp(wordsOfCommand[0], "login") == 0 && numOfWords == 1) {
+			if (fileOpened) lib.login(dir, tempUsers);
+			else cout << "You haven't opened a file yet." << endl;
+		}
+		else if (strcmp(wordsOfCommand[0], "logout") == 0 && numOfWords == 1) {
+			if (fileOpened) lib.logout();
+			else cout << "You haven't opened a file yet." << endl;
+		}
 		else if (strcmp(wordsOfCommand[0], "exit") == 0 && numOfWords == 1) {
 			cout << "Exiting the program..." << endl;
 			return 0;
