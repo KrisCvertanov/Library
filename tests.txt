@@ -1,0 +1,245 @@
+			Тест 1:
+Welcome to my Library! Enter a command to perform an action. To see list with all commands, type help.
+> open books.txt
+There was no existing file with that name, but there was created a new empty one!
+books.txt opened successfully!
+
+> books all
+There are currently no books in ther library.
+
+> help
+The following app commands are supported:
+open <file>                       opens <file>
+close                             closes currently opened file
+save                              saves updates in currently opened file
+saveas <file>                     saves currently opened file in <file>
+exit                              exits the program
+login                             log in as an existing user
+logout                            logs out (user needed)
+books all                         prints short information about all books (user needed)
+books info <bn_value>             prints detailed information about the book with unique number <bn_value> (user needed)
+books find <option> <option_str>  prints a book searched by <option> and <option_str> (user needed)
+books sort <option> [asc|desc]    sorts the books by <option> (user needed)
+books add                         adds a new book to the library (admin needed)
+books remove                      removes a book from the library (admin needed)
+users add <user> <password>       add s a new user with name <user> and password <password> (admin needed)
+users remove                      deletes user with name <user> from currently opened file (admin needed)
+
+> books add
+New book:
+Author: Steven King
+Title: It
+genre: horror
+description: a scary book
+date of release: 2002-12-21
+tags: clown canal georgy creepy
+rating: 8.9
+serial number: 1126
+
+Book added successfully!
+
+> save
+
+Updates saved successfully in books.txt!
+
+> open books.txt
+books.txt opened successfully!
+
+> books all
+modified info about book:
+It
+Steven King
+horror
+1126
+
+> books info 1126
+Steven King
+It
+horror
+a scary book
+2002-12-21
+clown canal georgy creepy
+8.9
+1126
+
+> books info 1130
+There's no book with that serial number!
+
+> books
+That command does not exist! Enter a valid one.
+> users add
+That command does not exist! Enter a valid one.
+> users add ivancho strongpass123
+
+User addded successfully!
+
+> logout
+User logged out successfully!
+
+> login
+Enter username: ivancho
+Enter password: strongpass123
+Welcome ivancho
+
+> books add
+There must be an admin logged in!
+
+> save
+Updates saved successfully in books.txt!
+
+> exit
+Exiting the program...
+
+
+				Тест2: 
+
+Welcome to my Library! Enter a command to perform an action. To see list with all commands, type help.
+>  books all
+You haven't opened a file yet.
+> open books.txt
+books.txt opened successfully!
+
+> books all
+modified info about book:
+It
+Steven King
+horror
+1126
+
+> users remove
+Enter user's name you want to remove: admin
+You cannot remove the admin(yourself)!
+> users remove
+Enter user's name you want to remove: ivancho
+
+User removed successfully!
+
+> books remove
+Enter books's serial number you want to remove: 1126
+
+Book removed successfully!
+
+> save
+Updates saved successfully in books.txt!
+
+> open books.txt
+books.txt opened successfully!
+
+> logout
+User logged out successfully!
+
+> login
+Enter username: ivancho
+There's no user with that name.
+> login
+Enter username: admin
+Enter password: i<3c++
+Welcome admin
+
+> books add
+New book:
+Author: Suzanne Collins
+Title: The Hunger Games
+genre: fiction
+description: winning means fame and fortune, losing means certain death
+date of release: 2010-04-27
+tags: action mockingbird braveness
+rating: 9.1
+serial number: 1234
+
+Book added successfully!
+
+> saveas books2.txt
+Updates saved successfully in books2.txt!
+
+> open books2.txt
+books2.txt opened successfully!
+
+> books all
+modified info about book:
+The Hunger Games
+Suzanne Collins
+fiction
+1234
+
+> exit
+Exiting the program...
+
+			Тест3: 
+Welcome to my Library! Enter a command to perform an action. To see list with all commands, type help.
+> open book2.txt
+book2.txt opened successfully!
+
+> books add
+New book:
+Author: Steven King
+Title: It
+genre: horror
+description: scary book
+date of release: 2004-01-10
+tags: clown ballon smile
+rating: 8.4
+serial number: 1200
+
+Book added successfully!
+
+> books add
+New book:
+Author: JKRowling
+Title: Harry Potter
+genre: fantasy
+description: a young wizard faces great evil
+date of release: 1999-11-14
+tags: magic wand voldemort
+rating: 9.5
+serial number: 1103
+
+Book added successfully!
+
+> save
+Updates saved successfully in book2.txt!
+
+> open book2.txt
+book2.txt opened successfully!
+
+> books sort title asc
+Books sorted by title successfully!
+
+> save
+Updates saved successfully in book2.txt!
+
+> open book2.txt
+book2.txt opened successfully!
+
+> books all
+modified info about book:
+Harry Potter
+JKRowling
+fantasy
+1103
+
+modified info about book:
+It
+Steven King
+horror
+1200
+
+modified info about book:
+The Hunger Games
+Suzane Collins
+fiction
+1234
+
+> books find author Steven King
+Steven King
+It
+horror
+scary book
+2004-01-10
+clown ballon smile
+8.4
+1200
+
+
+> exit
+Exiting the program...
